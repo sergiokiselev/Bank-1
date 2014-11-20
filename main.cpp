@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <iostream>
 #include "sqlite3.h"
+#include "adminFunctions.c"
+
 
 char* resultPassword;
 char* resultRole;
