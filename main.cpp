@@ -16,14 +16,6 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName) {
 	return 0;
 }
 
-void adminOperation() {
-	printf("Admin operation\n");
-}
-
-void operationistOperation() {
-	printf("Operationist operation\n");
-}
-
 void operationistPutMoneyToAccount(int accountId, double moneyValue){
 
 	sqlite3 *db;
@@ -104,6 +96,33 @@ void operationTakeMoneyFromAccount(int accountId, double moneyValue){
 	}
 }
 
+void adminOperation() {
+	printf("Admin operation\n");
+}
+
+void operationistOperation() {
+	int menuItem, accountId, moneyValue;
+
+	printf("Choose operation:\n1. Put money to account.\n2. Take money from account.\n");
+	scanf("%d", &menuItem);
+	printf("Input accountId to what put money.\n");
+	scanf("%d", &accountId);
+	printf("Input money value which put to account.\n");
+	scanf("%d", &moneyValue);
+
+	switch (menuItem)
+	{
+	case 1:
+		operationistPutMoneyToAccount(accountId, moneyValue);
+		break;
+	case 2:
+		operationTakeMoneyFromAccount(accountId, moneyValue);
+		break;
+	default:
+		printf("Incorrect menu item.");
+		break;
+	}
+}
 int main(int argc, char **argv){
 	sqlite3 *db;
 	char *zErrMsg = 0;
@@ -123,7 +142,7 @@ int main(int argc, char **argv){
 
 	printf("Enter login and password\n");
 	scanf("%s %s", login, password);
-	sprintf(selectCommand, "select password, role from admin where login = '%s'", login);
+	sprintf(selectCommand, "select password, role from user where login = '%s'", login);
 	rc = sqlite3_exec(db, selectCommand, callback, 0, &zErrMsg);
 	if (rc != SQLITE_OK) {
 		fprintf(stderr, "SQL error: %s\n", zErrMsg);
