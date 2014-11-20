@@ -4,7 +4,7 @@
 #include <iostream>
 #include "sqlite3.h"
 #include "adminFunctions.c"
-//#include "dbfunc.h"
+#include "operationistFunctions.c"
 
 char* resultPassword;
 char* resultRole;
@@ -18,85 +18,7 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName) {
 	return 0;
 }
 
-void operationistPutMoneyToAccount(int accountId, double moneyValue){
 
-	sqlite3 *db;
-	sqlite3_stmt *statement;
-	char * zErrMsg = 0;
-	char* selectCommand = (char*)malloc(sizeof(char)* 100);
-	double balance = -1;
-	int rc = 0;
-
-	if (sqlite3_open(dbName, &db) == SQLITE_OK) {
-		sprintf(selectCommand, "select balance from bank_accounts where accountid = %d", accountId);
-		if (sqlite3_prepare_v2(db, selectCommand, -1, &statement, NULL) == SQLITE_OK) {
-			while (sqlite3_step(statement) == SQLITE_ROW) {
-				balance = sqlite3_column_double(statement, 0);
-			}
-
-			if (balance == -1) {
-				printf("User with accountId = %d doesn't exist.\n", accountId);
-				sqlite3_close(db);
-				return;
-			}
-
-			balance += moneyValue;
-			sprintf(selectCommand, "update bank_accounts set balance = %f where accountid = %d", balance, accountId);
-			rc = sqlite3_exec(db, selectCommand, callback, 0, &zErrMsg);
-
-			if (rc != SQLITE_OK) {
-				printf("SQL update error: %s\n", zErrMsg);
-				sqlite3_free(zErrMsg);
-				sqlite3_close(db);
-				return;
-			}
-			else {
-				printf("Money were put to accountid = %d\n", accountId);
-				sqlite3_close(db);
-			}
-		}
-	}
-}
-void operationTakeMoneyFromAccount(int accountId, double moneyValue){
-
-	sqlite3 *db;
-	sqlite3_stmt *statement;
-	char * zErrMsg = 0;
-	char* selectCommand = (char*)malloc(sizeof(char)* 100);
-	double balance = -1;
-	int rc = 0;
-	if (sqlite3_open(dbName, &db) == SQLITE_OK) {
-		sprintf(selectCommand, "select balance from bank_accounts where accountid = %d", accountId);
-		if (sqlite3_prepare_v2(db, selectCommand, -1, &statement, NULL) == SQLITE_OK) {
-			while (sqlite3_step(statement) == SQLITE_ROW) {
-				balance = sqlite3_column_double(statement, 0);
-			}
-
-			if (balance == -1) {
-				printf("User with accountId = %d doesn't exist.\n", accountId);
-				sqlite3_close(db);
-				return;
-			}
-
-			if (balance < moneyValue) { balance = 0; }
-			else { balance -= moneyValue; }
-
-			sprintf(selectCommand, "update bank_accounts set balance = %f where accountid = %d", balance, accountId);
-			rc = sqlite3_exec(db, selectCommand, callback, 0, &zErrMsg);
-
-			if (rc != SQLITE_OK) {
-				printf("SQL update error: %s\n", zErrMsg);
-				sqlite3_free(zErrMsg);
-				sqlite3_close(db);
-				return;
-			}
-			else {
-				printf("Money were taken from accountid = %d\n", accountId);
-				sqlite3_close(db);
-			}
-		}
-	}
-}
 
 void adminOperation() {
 	int menuItem;
@@ -149,6 +71,7 @@ void operationistOperation() {
 		break;
 	}
 }
+
 int main(int argc, char **argv){
 	sqlite3 *db;
 	char *zErrMsg = 0;
@@ -175,13 +98,16 @@ int main(int argc, char **argv){
 		sqlite3_free(zErrMsg);
 	}
 	if (strcmp(resultPassword, password) == 0) {
-		printf("Choose operation:\n 1 - exit\n");
 		if (strcmp(resultRole, "1") == 0) {
 			adminOperation();
 		}
 		else if (strcmp(resultRole, "2") == 0) {
 			operationistOperation();
 		}
+		
+	}
+	else {
+		printf("Incorrect login and/or password.\n");
 	}
 	sqlite3_close(db);
 	system("pause");

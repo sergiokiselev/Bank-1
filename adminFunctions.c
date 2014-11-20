@@ -2,8 +2,6 @@
 
 #include "stdio.h"
 #include "sqlite3.h"
-//#include "dbfunc.h"
-
 
 char* dbName2 = "db";
 
