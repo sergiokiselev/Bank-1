@@ -4,7 +4,7 @@
 #include <iostream>
 #include "sqlite3.h"
 #include "adminFunctions.c"
-
+//#include "dbfunc.h"
 
 char* resultPassword;
 char* resultRole;
@@ -125,7 +125,7 @@ int main(int argc, char **argv){
 
 	printf("Enter login and password\n");
 	scanf("%s %s", login, password);
-	sprintf(selectCommand, "select password, role from admin where login = '%s'", login);
+	sprintf(selectCommand, "select password, role from user where login = '%s'", login);
 	rc = sqlite3_exec(db, selectCommand, callback, 0, &zErrMsg);
 	if (rc != SQLITE_OK) {
 		fprintf(stderr, "SQL error: %s\n", zErrMsg);
