@@ -57,7 +57,7 @@ void deleteAccountToClient(int id) {
 }
 
 
-void addNewClient(char* login, char* password) {
+void addNewClient(char* login, char* password, int role) {
 	int primaryKey; 
 	int rc;
 	int rc1;
@@ -73,7 +73,7 @@ void addNewClient(char* login, char* password) {
            }
 	   }
     }
-	sprintf(insertCommand, "insert into user values(%d, '%s', '%s', 3);",++primaryKey , login, password);   
+	sprintf(insertCommand, "insert into user values(%d, '%s', '%s', %d);",++primaryKey , login, password, role);   
 	rc1 = sqlite3_exec(database, insertCommand, 0, 0, &zErrMsg);
 }
 

@@ -21,7 +21,31 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName) {
 
 
 void adminOperation() {
-	printf("Admin operation\n");
+	int menuItem;
+	printf("Admin operation: 1 - add client, 2 - delete client, 3 - add account, 4 - delete account. \n");
+	scanf("%d",&menuItem);
+	printf("Enter login and password of client:");
+	char* login, *password;
+	login = (char*)malloc(sizeof(char)* 100);
+	password = (char*)malloc(sizeof(char)* 100);
+	scanf("%s %s", login, password);
+	switch (menuItem) {
+		case 1:
+			addNewClient(login,password,3);
+			break;
+		case 2:
+			deleteClient(2);
+			break;
+		case 3:
+			addAccountToClient(login,password);
+			break;
+		case 4:
+			deleteAccountToClient(6);
+			break;
+		default:
+			printf("cannot find such operation");
+			break;
+	}
 }
 
 void operationistOperation() {
