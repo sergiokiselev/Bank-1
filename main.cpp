@@ -5,10 +5,6 @@
 #include <iostream>
 
 
-
-
-//CRT_SECURE_NO_WARNINGS
-
 char* resultPassword;
 char* resultRole;
 
