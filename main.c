@@ -7,9 +7,10 @@
 #include "adminFunctions.h"
 #include "operationistFunctions.h"
 #include "clientFunctions.h"
+//#include "unsignedFunctions.h"
 
 char* resultPassword;
-char* resultRole;
+char resultRole;
 char* dbName = "db";
 int resultId;
 
@@ -75,61 +76,35 @@ void operationistOperation() {
 	}
 }
 
-int main(int argc, char **argv){
-	sqlite3 *db;
-	char *zErrMsg = 0;
-	int rc;
-	char* login, *password;
-	char* selectCommand = (char*)malloc(sizeof(char)* 100);
-	login = (char*)malloc(sizeof(char)* 100);
-	password = (char*)malloc(sizeof(char)* 100);
+extern sqlite3 *dataBase;
+sqlite3 *db;
 
-	rc = sqlite3_open(dbName, &db);
-	if (rc) {
-		fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
-		sqlite3_close(db);
-		system("pause");
-		return(1);
-	}
 
-	printf("Enter login and password\n");
-	scanf("%s %s", login, password);
-	sprintf(selectCommand, "select password, role from user where login = '%s'", login);
-	rc = sqlite3_exec(db, selectCommand, callback, 0, &zErrMsg);
-	if (rc != SQLITE_OK) {
-		fprintf(stderr, "SQL error: %s\n", zErrMsg);
-		sqlite3_free(zErrMsg);
+void clientOperation() {
+	int command = -1;
+
+    printf("Choose operation:\n1 - Exit\n2 - Watch client accounts\n3 - Watch account balance\n");
+    scanf("%s", command);
+    if (!strcmp(command, "1")) {
+		return;
+    } else if (!strcmp(command, "2")) {
+        watchClientAccounts(resultId, db);
+    } else if (!strcmp(command, "3")) {
+        char* accountIdStr = (char*)malloc(sizeof(char)*20);
+        int accountId;
+        printf("Enter account id:\n");
+        scanf("%s", accountIdStr);
+        accountId = atoi(accountIdStr);
+        watchAccountBalance(accountId ,db);	
+    }
+}
+
+int main() {
+	if (sqlite3_open(dbName, &dataBase)) {
+		fprintf(stderr, "Can't open database.\n Error: %s\n", sqlite3_errmsg(dataBase));
+		sqlite3_close(dataBase);
+		return 1;
 	}
-	if (strcmp(resultPassword, password) == 0) {
-		char* command = (char*)malloc(sizeof(char)*20);
-		if (strcmp(resultRole, "1") == 0) {
-			adminOperation();
-		} else if (strcmp(resultRole, "2") == 0) {
-			operationistOperation();
-		} else if (strcmp(resultRole, "3") == 0) {
-			while(1) {
-				printf("Choose operation:\n1 - Exit\n2 - Watch client accounts\n3 - Watch account balance\n");
-				scanf("%s", command);
-				if (!strcmp(command, "1")) {
-					break;
-				} else if (!strcmp(command, "2")) {
-					watchClientAccounts(resultId, db);
-				} else if (!strcmp(command, "3")) {
-					char* accountIdStr = (char*)malloc(sizeof(char)*20);
-					int accountId;
-					printf("Enter account id:\n");
-					scanf("%s", accountIdStr);
-					accountId = atoi(accountIdStr);
-					watchAccountBalance(accountId ,db);	
-				}
-			}
-		}
-		
-	}
-	else {
-		printf("Incorrect login and/or password.\n");
-	}
-	sqlite3_close(db);
-	system("pause");
+	unauthorizedRole();
 	return 0;
 }
