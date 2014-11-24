@@ -4,6 +4,33 @@
 #include <string.h>
 #include "unsignedFunctions.h"
 
+char* dataBaseName = "db";
+sqlite3* dataBase;
+
+
+char roles[ROLES_NUMBER] = { ADMIN_ROLE, OPERATOR_ROLE, CLIENT_ROLE };
+void* rolesFunctions[ROLES_NUMBER] = { *adminOperation, *operationistOperation, *clientOperation };
+
+char login[32];
+char password[32];
+char userRole;
+
+char* resultPassword;
+char resultRole;
+
+char authentication(char* login, char* password);
+void* authorization();
+void* showBankInfo();
+void* registerNewUser();
+void* logIn();
+
+static int fillResult(void *NotUsed, int argc, char **argv, char **azColName);
+
+
+#define MAIN_MENU_ITEM_NUM 3
+
+char* mainMenuItem[] = { "LogIn", "Register", "BankInfo" };
+void* (*mainMenuFunctions[])() = { *logIn, *registerNewUser, *showBankInfo };
 
 
 int unauthorizedRole() {
@@ -51,12 +78,13 @@ char authentication(char* login, char* password) {
 }
 
 void* authorization() {
+	int i;
 	printf("Enter login: ");
 	gets(login);
 	printf("Enter password: ");
 	gets(password);
 	userRole = authentication(login, password);
-	for (int i = 0; i < ROLES_NUMBER; ++i) {
+	for (i = 0; i < ROLES_NUMBER; ++i) {
 		if (userRole == roles[i]) {
 			return rolesFunctions[i];
 		}
@@ -72,6 +100,17 @@ void* showBankInfo() {
 }
 
 void* registerNewUser() {
+	char getUserSelect[255];
+	char* errorMessage = 0;
+	printf("Enter login: ");
+	gets(login);
+	printf("Enter password: ");
+	gets(password);
+	sprintf(getUserSelect, "INSERT INTO registration (login, password) VALUES ('%s', '%s');", login, password);
+	if (sqlite3_exec(dataBase, getUserSelect, 0, 0, &errorMessage) != SQLITE_OK) {
+		fprintf(stderr, "SQL error: %s\n", errorMessage);
+		sqlite3_free(errorMessage);
+	}
 	return 0;
 }
 
@@ -88,10 +127,12 @@ void menu(int itemNum, char* menuItem[], void*(*menuFunctions[])()) {
 	char buffer[100];
 	void* (*function) (void);
 	int(*userFunction) (void);
+	int i;
+
 	while (command) {
 		printf("Input command:\n");
 		printf("  0. Exit\n");
-		for (int i = 0; i < itemNum; ++i) {
+		for (i = 0; i < itemNum; ++i) {
 			printf("  %d. %s\n", i + 1, menuItem[i]);
 		}
 		scanf("%d", &command);

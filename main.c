@@ -7,22 +7,11 @@
 #include "adminFunctions.h"
 #include "operationistFunctions.h"
 #include "clientFunctions.h"
-//#include "unsignedFunctions.h"
+#include "unsignedFunctions.h"
 
-char* resultPassword;
-char resultRole;
 char* dbName = "db";
 int resultId;
 
-
-
-static int callback(void *NotUsed, int argc, char **argv, char **azColName) {
-	resultPassword = (char*)malloc(sizeof(char)* 100);
-	resultRole = (char*)malloc(sizeof(char)* 100);
-	sprintf(resultPassword, "%s", argv[0] ? argv[0] : "NULL");
-	sprintf(resultRole, "%s", argv[1] ? argv[1] : "NULL");
-	return 0;
-}
 
 void adminOperation() {
 	int menuItem;
@@ -81,7 +70,9 @@ sqlite3 *db;
 
 
 void clientOperation() {
-	int command = -1;
+	char* command = "-1";
+	char* accountIdStr = (char*)malloc(sizeof(char)* 20);
+	int accountId;
 
     printf("Choose operation:\n1 - Exit\n2 - Watch client accounts\n3 - Watch account balance\n");
     scanf("%s", command);
@@ -90,8 +81,6 @@ void clientOperation() {
     } else if (!strcmp(command, "2")) {
         watchClientAccounts(resultId, db);
     } else if (!strcmp(command, "3")) {
-        char* accountIdStr = (char*)malloc(sizeof(char)*20);
-        int accountId;
         printf("Enter account id:\n");
         scanf("%s", accountIdStr);
         accountId = atoi(accountIdStr);
