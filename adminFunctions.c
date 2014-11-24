@@ -1,14 +1,12 @@
-#define _CRT_SECURE_NO_WARNINGS
-
 #include "stdio.h"
 #include "sqlite3.h"
+#include "adminFunctions.h"
 
 char* dbName2 = "db";
 
 void addAccountToClient(char* login, char* password) {
 	int primaryKey = -1; 
 	int client_id = -1;
-	int rc;
 	int rc1;
 	sqlite3 *database;
 	char* insertCommand = (char*)malloc(sizeof(char)*200);
@@ -40,9 +38,7 @@ void addAccountToClient(char* login, char* password) {
 }
 
 
-void deleteAccountToClient(int id) {
-	int primaryKey; 
-	int rc;
+void deleteAccountToClient(int id) { 
 	int rc1;
 	sqlite3 *database;
 	char* insertCommand = (char*)malloc(sizeof(char)*200);
@@ -59,7 +55,6 @@ void deleteAccountToClient(int id) {
 
 void addNewClient(char* login, char* password, int role) {
 	int primaryKey; 
-	int rc;
 	int rc1;
 	sqlite3 *database;
 	char* insertCommand = (char*)malloc(sizeof(char)*200);
@@ -78,8 +73,6 @@ void addNewClient(char* login, char* password, int role) {
 }
 
 void deleteClient(int id) {
-	int primaryKey; 
-	int rc;
 	int rc1;
 	sqlite3 *database;
 	char* insertCommand = (char*)malloc(sizeof(char)*200);
