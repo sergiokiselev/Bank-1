@@ -41,7 +41,7 @@ void adminOperation() {
 			deleteClient(2);
 			break;
 		case 3:
-			addAccountToClient(login,password);
+			addAccountToClient(login,password,1111,2,55);
 			break;
 		case 4:
 			deleteAccountToClient(6);
