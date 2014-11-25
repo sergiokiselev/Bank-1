@@ -9,10 +9,10 @@ static char * test_authentication() {
 	mu_assert("error, open database", openDataBase() == 0);
 	mu_assert("error, admin authentication", authentication("admin", "pass1") == '1');
 	mu_assert("error, operator authentication", authentication("oper", "pass2") == '2');
-	mu_assert("error, user authentication", authentication("shipa", "pass1") == 'u');
-	mu_assert("error, wrong input", authentication("", "") == 'u');
-	mu_assert("error, wrong input", authentication("****", "**_88") == 'u');
-	mu_assert("error, wrong input", authentication("TOP(1)", "") == 'u');
+	mu_assert("error, user authentication", authentication("shipa", "jenia") == '3');
+	mu_assert("error, empty input", authentication("", "") == 'u');
+	mu_assert("error, wrong input", authentication("admin\0password", "**_88") == 'u');
+	mu_assert("error, wrong input", authentication("TRUE", "") == 'u');
 	mu_assert("error, long login", authentication("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "") == 'u');
 	mu_assert("error, long password", authentication("", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA") == 'u');
 	mu_assert("error, unreal authentication", authentication("sa", "pass1") == 'u');
@@ -27,7 +27,9 @@ static char * all_tests() {
 	return 0;
 }
 
+
 int startTests() {
+//int main(int argc, char **argv) {
 	char *result = all_tests();
 	if (result != 0) {
 		printf("%s\n", result);

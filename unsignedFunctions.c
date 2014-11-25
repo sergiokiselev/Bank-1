@@ -3,12 +3,12 @@
 #include <malloc.h>
 #include <string.h>
 #include "unsignedFunctions.h"
+#include "util.h"
+
+extern char* dataBaseName;
+extern sqlite3* dataBase;
 
 
-char* dataBaseName = "db";
-sqlite3* dataBase;
-
-//sqlite3* openDataBase(char* dataBaseName, sqlite3* dataBase) {
 int openDataBase() {
 	if (sqlite3_open(dataBaseName, &dataBase)) {
 		fprintf(stderr, "Can't open database.\n Error: %s\n", sqlite3_errmsg(dataBase));
@@ -109,7 +109,21 @@ void* authorization() {
 	printf("Enter login: ");
 	gets(login);
 	printf("Enter password: ");
-	gets(password);
+	for (int i = 0; i < MAX_PASSWORD_LINGTH; i++) {
+		password[i] = _getch();
+		if (password[i] == '\r') {
+			password[i] = '\0';
+			putchar('\n');
+			break;
+		}
+		if (password[i] == 8) {
+			if (i > 0) {
+				i--;
+			}
+			_getch();
+		}
+		
+	}
 	userRole = authentication(login, password);
     
 	for (i = 0; i < ROLES_NUMBER; ++i) {

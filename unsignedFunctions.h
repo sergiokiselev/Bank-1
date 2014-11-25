@@ -8,6 +8,8 @@ int closeDataBase();
 void adminOperation();
 void operationistOperation();
 void clientOperation();
+int unauthorizedRole();
+
 char authentication(char* login, char* password);
 
 #define DATABASE_ERROR 1
@@ -20,7 +22,7 @@ char authentication(char* login, char* password);
 
 #define MAX_LOGIN_LINGTH 32
 #define MAX_PASSWORD_LINGTH 32
-int unauthorizedRole();
+
 
 void menu(int itemNum, char* menuItem[], void*(*menuFunctions[])());
 

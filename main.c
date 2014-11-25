@@ -9,15 +9,15 @@
 #include "clientFunctions.h"
 #include "unsignedFunctions.h"
 
-char* dbName = "db";
-int resultId;
+extern char* dataBaseName;
+sqlite3 *db;
 
 
 void adminOperation() {
 	int menuItem;
 	char* login, *password;
 	printf("Admin operation: 1 - add client, 2 - delete client, 3 - add account, 4 - delete account. \n");
-	scanf("%d",&menuItem);
+	scanf("%d", &menuItem);
 	printf("Enter login and password of client:");
 	login = (char*)malloc(sizeof(char)* 100);
 	password = (char*)malloc(sizeof(char)* 100);
@@ -65,14 +65,13 @@ void operationistOperation() {
 	}
 }
 
-extern sqlite3 *dataBase;
-sqlite3 *db;
 
 
 void clientOperation() {
 	char* command = "-1";
 	char* accountIdStr = (char*)malloc(sizeof(char)* 20);
 	int accountId;
+	int resultId=0;
 
     printf("Choose operation:\n1 - Exit\n2 - Watch client accounts\n3 - Watch account balance\n");
     scanf("%s", command);
@@ -87,6 +86,7 @@ void clientOperation() {
         watchAccountBalance(accountId ,db);	
     }
 }
+
 
 
 int main() {

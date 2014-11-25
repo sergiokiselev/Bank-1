@@ -1,8 +1,11 @@
 #include "stdio.h"
 #include "sqlite3.h"
 #include "operationistFunctions.h"
+//#include "util.h"
 
-char* dbName3 = "db";
+extern sqlite3 *dataBase;
+extern char* dataBaseName;
+
 
 void operationistPutMoneyToAccount(int accountId, double moneyValue){
 
@@ -13,7 +16,7 @@ void operationistPutMoneyToAccount(int accountId, double moneyValue){
 	double balance = -1;
 	int rc = 0;
 
-	if (sqlite3_open(dbName3, &db) == SQLITE_OK) {
+	if (sqlite3_open(dataBaseName, &db) == SQLITE_OK) {
 		sprintf(selectCommand, "select balance from bank_accounts where accountid = %d", accountId);
 		if (sqlite3_prepare_v2(db, selectCommand, -1, &statement, NULL) == SQLITE_OK) {
 			while (sqlite3_step(statement) == SQLITE_ROW) {
@@ -51,7 +54,7 @@ void operationTakeMoneyFromAccount(int accountId, double moneyValue){
 	char* selectCommand = (char*)malloc(sizeof(char)* 100);
 	double balance = -1;
 	int rc = 0;
-	if (sqlite3_open(dbName3, &db) == SQLITE_OK) {
+	if (sqlite3_open(dataBaseName, &db) == SQLITE_OK) {
 		sprintf(selectCommand, "select balance from bank_accounts where accountid = %d", accountId);
 		if (sqlite3_prepare_v2(db, selectCommand, -1, &statement, NULL) == SQLITE_OK) {
 			while (sqlite3_step(statement) == SQLITE_ROW) {
