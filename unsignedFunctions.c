@@ -4,6 +4,7 @@
 #include <string.h>
 #include "unsignedFunctions.h"
 
+
 char* dataBaseName = "db";
 sqlite3* dataBase;
 
@@ -39,17 +40,16 @@ char resultRole;
 
 char authentication(char* login, char* password);
 void* authorization();
-void* showBankInfo();
-void* registerNewUser();
-void* logIn();
+int logIn();
+int registerNewUser();
+int showBankInfo();
 
 static int fillResult(void *NotUsed, int argc, char **argv, char **azColName);
-
 
 #define MAIN_MENU_ITEM_NUM 3
 
 char* mainMenuItem[] = { "LogIn", "Register", "BankInfo" };
-void* (*mainMenuFunctions[])() = { *logIn, *registerNewUser, *showBankInfo };
+int (*mainMenuFunctions[])() = { *logIn, *registerNewUser, *showBankInfo };
 
 
 int unauthorizedRole() {
@@ -84,7 +84,15 @@ static int fillResult(void *NotUsed, int argc, char **argv, char **azColName) {
 char authentication(char* login, char* password) {
 	char getUserSelect[255];
 	char* errorMessage = 0;
+	if (strlen(login) > MAX_LOGIN_LINGTH && strlen(password) > MAX_PASSWORD_LINGTH) {
+		return AUTHENTICATION_ERROR;
+	}
 	sprintf(getUserSelect, "SELECT password, role FROM user WHERE login = '%s'", login);
+    if (dataBase == NULL) {
+        if (openDataBase() == SQLITE_OK) {
+            return AUTHENTICATION_ERROR;
+        }
+    }
 	if (sqlite3_exec(dataBase, getUserSelect, fillResult, 0, &errorMessage) != SQLITE_OK) {
 		fprintf(stderr, "SQL error: %s\n", errorMessage);
 		sqlite3_free(errorMessage);
@@ -93,7 +101,7 @@ char authentication(char* login, char* password) {
 	if (!strcmp(resultPassword, password)) {
 		return resultRole;
 	}
-	return 'n';
+	return NO_SUCH_USER;
 }
 
 void* authorization() {
@@ -103,6 +111,7 @@ void* authorization() {
 	printf("Enter password: ");
 	gets(password);
 	userRole = authentication(login, password);
+    
 	for (i = 0; i < ROLES_NUMBER; ++i) {
 		if (userRole == roles[i]) {
 			return rolesFunctions[i];
@@ -112,13 +121,13 @@ void* authorization() {
 	return *error;
 }
 
-void* showBankInfo() {
+int showBankInfo() {
 	printf("LLC \"Bank T\"\n");
 	printf("There will be some information about bank.\n");
 	return 0;
 }
 
-void* registerNewUser() {
+int registerNewUser() {
 	char getUserSelect[255];
 	char* errorMessage = 0;
 	printf("Enter login: ");
@@ -133,7 +142,7 @@ void* registerNewUser() {
 	return 0;
 }
 
-void* logIn() {
+int logIn() {
 	void(*userFunction) (void);
 	userFunction = (void(*)()) authorization();
 	userFunction();

@@ -88,6 +88,7 @@ void clientOperation() {
     }
 }
 
+
 int main() {
 	openDataBase();
 	unauthorizedRole();
