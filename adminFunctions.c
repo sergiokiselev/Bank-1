@@ -4,7 +4,7 @@
 
 char* dbName2 = "db";
 
-void addAccountToClient(char* login, char* password) {
+void addAccountToClient(char* login, char* password, int pin, int accountType, int overdraft) {
 	int primaryKey = -1; 
 	int client_id = -1;
 	int rc1;
@@ -33,7 +33,7 @@ void addAccountToClient(char* login, char* password) {
 		printf("Sqlite error!");
 		return;
 	}
-	sprintf(insertCommand, "insert into bank_accounts values(%d, 0, 1111, %d, 2, 5345);",++client_id , primaryKey);   
+	sprintf(insertCommand, "insert into bank_accounts values(%d, 0, %d, %d, %d, %d);",++client_id , pin, primaryKey, accountType, overdraft);   
 	rc1 = sqlite3_exec(database, insertCommand, 0, 0, &zErrMsg);
 }
 
