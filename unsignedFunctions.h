@@ -2,6 +2,9 @@
 #ifndef _UNSIGNED_USER_
 #define _UNSIGNED_USER_
 
+int openDataBase();
+int closeDataBase();
+
 void adminOperation();
 void operationistOperation();
 void clientOperation();

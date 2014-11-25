@@ -89,11 +89,8 @@ void clientOperation() {
 }
 
 int main() {
-	if (sqlite3_open(dbName, &dataBase)) {
-		fprintf(stderr, "Can't open database.\n Error: %s\n", sqlite3_errmsg(dataBase));
-		sqlite3_close(dataBase);
-		return 1;
-	}
+	openDataBase();
 	unauthorizedRole();
+	closeDataBase();
 	return 0;
 }

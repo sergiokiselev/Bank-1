@@ -7,6 +7,25 @@
 char* dataBaseName = "db";
 sqlite3* dataBase;
 
+//sqlite3* openDataBase(char* dataBaseName, sqlite3* dataBase) {
+int openDataBase() {
+	if (sqlite3_open(dataBaseName, &dataBase)) {
+		fprintf(stderr, "Can't open database.\n Error: %s\n", sqlite3_errmsg(dataBase));
+		sqlite3_close(dataBase);
+		return 1;
+	}
+	return 0;
+};
+int closeDataBase() {
+	if (dataBase == NULL) {
+		return 0;
+	}
+	if (sqlite3_close(dataBase)) {
+		fprintf(stderr, "Can't close database.\n Error: %s\n", sqlite3_errmsg(dataBase));
+		return 1;
+	}
+	return 0;
+};
 
 char roles[ROLES_NUMBER] = { ADMIN_ROLE, OPERATOR_ROLE, CLIENT_ROLE };
 void* rolesFunctions[ROLES_NUMBER] = { *adminOperation, *operationistOperation, *clientOperation };
