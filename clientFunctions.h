@@ -1,5 +1,7 @@
 #include "sqlite3.h"
 
-void watchClientAccounts(int clientId, sqlite3* db);
+int watchClientAccounts(int clientId);
 
-void watchAccountBalance(int accountId, sqlite3* db);
+int watchAccountBalance(int accountId, int clientId);
+
+int watchAccountCards(int accountId, int clientId);

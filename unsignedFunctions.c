@@ -2,6 +2,7 @@
 #include "sqlite3.h"
 #include <malloc.h>
 #include <string.h>
+#include <stdlib.h>
 #include "unsignedFunctions.h"
 #include "util.h"
 
@@ -33,7 +34,6 @@ int closeDataBase() {
 char roles[ROLES_NUMBER] = { ADMIN_ROLE, OPERATOR_ROLE, CLIENT_ROLE };
 void* rolesFunctions[ROLES_NUMBER] = { *adminOperation, *operationistOperation, *clientOperation };
 
-
 char authentication(char* login, char* password);
 void* authorization();
 int logIn();
@@ -56,6 +56,7 @@ int error() {
 }
 
 static int fillResult(void *NotUsed, int argc, char **argv, char **azColName) {
+	char* resultIdStr = (char*)malloc(sizeof(char)* 10);
 	resultPassword = (char*)malloc(sizeof(char)* 32);
 
 	if (argv[0]) {
@@ -69,6 +70,12 @@ static int fillResult(void *NotUsed, int argc, char **argv, char **azColName) {
 	} else {
 		resultPassword = NULL;
 	}
+
+	if (argv[2]) {
+		resultId = atoi(argv[2]);
+	} else {
+		resultId = 0;
+	}
 	return 0;
 }
 
@@ -79,7 +86,7 @@ char authentication(char* login, char* password) {
 	if (strlen(login) > MAX_LOGIN_LINGTH && strlen(password) > MAX_PASSWORD_LINGTH) {
 		return AUTHENTICATION_ERROR;
 	}
-	sprintf(getUserSelect, "SELECT password, role FROM user WHERE login = '%s'", login);
+	sprintf(getUserSelect, "SELECT password, role, user_id FROM user WHERE login = '%s'", login);
     if (dataBase == NULL) {
         if (openDataBase() == SQLITE_OK) {
             return AUTHENTICATION_ERROR;

@@ -9,8 +9,10 @@
 #include "clientFunctions.h"
 #include "unsignedFunctions.h"
 
+
 extern char* dataBaseName;
-sqlite3 *db;
+extern int resultId;
+
 
 
 void adminOperation() {
@@ -68,25 +70,30 @@ void operationistOperation() {
 
 
 void clientOperation() {
-	char* command = "-1";
+	char* command = (char*)malloc(sizeof(char)* 10);
 	char* accountIdStr = (char*)malloc(sizeof(char)* 20);
 	int accountId;
-	int resultId=0;
 
-    printf("Choose operation:\n1 - Exit\n2 - Watch client accounts\n3 - Watch account balance\n");
-    scanf("%s", command);
-    if (!strcmp(command, "1")) {
-		return;
-    } else if (!strcmp(command, "2")) {
-        watchClientAccounts(resultId, db);
-    } else if (!strcmp(command, "3")) {
-        printf("Enter account id:\n");
-        scanf("%s", accountIdStr);
-        accountId = atoi(accountIdStr);
-        watchAccountBalance(accountId ,db);	
-    }
+	while(1) {
+		printf("Choose operation:\n  0. Exit\n  1. Watch client accounts\n  2. Watch account balance\n  3. Watch acount cards\n");
+		scanf("%s", command);
+		if (!strcmp(command, "0")) {
+			return;
+		} else if (!strcmp(command, "1")) {
+			watchClientAccounts(resultId);
+		} else if (!strcmp(command, "2")) {
+			printf("Enter account id:\n");
+			scanf("%s", accountIdStr);
+			accountId = atoi(accountIdStr);
+			watchAccountBalance(accountId, resultId);	
+		} else if (!strcmp(command, "3")) {
+			printf("Enter account id:\n");
+			scanf("%s", accountIdStr);
+			accountId = atoi(accountIdStr);
+			watchAccountCards(accountId, resultId);
+		}
+	}
 }
-
 
 
 int main() {
