@@ -8,6 +8,8 @@
 extern char* dataBaseName;
 extern sqlite3* dataBase;
 
+char* resultPassword;
+char resultRole;
 
 int openDataBase() {
 	if (sqlite3_open(dataBaseName, &dataBase)) {
@@ -31,12 +33,6 @@ int closeDataBase() {
 char roles[ROLES_NUMBER] = { ADMIN_ROLE, OPERATOR_ROLE, CLIENT_ROLE };
 void* rolesFunctions[ROLES_NUMBER] = { *adminOperation, *operationistOperation, *clientOperation };
 
-char login[32];
-char password[32];
-char userRole;
-
-char* resultPassword;
-char resultRole;
 
 char authentication(char* login, char* password);
 void* authorization();
@@ -44,10 +40,7 @@ int logIn();
 int registerNewUser();
 int showBankInfo();
 
-static int fillResult(void *NotUsed, int argc, char **argv, char **azColName);
-
 #define MAIN_MENU_ITEM_NUM 3
-
 char* mainMenuItem[] = { "LogIn", "Register", "BankInfo" };
 int (*mainMenuFunctions[])() = { *logIn, *registerNewUser, *showBankInfo };
 
@@ -67,15 +60,13 @@ static int fillResult(void *NotUsed, int argc, char **argv, char **azColName) {
 
 	if (argv[0]) {
 		sprintf(resultPassword, "%s", argv[0]);
-	}
-	else {
+	} else {
 		resultPassword = NULL;
 	}
 
 	if (argv[1]) {
 		resultRole = argv[1][0];
-	}
-	else {
+	} else {
 		resultPassword = NULL;
 	}
 	return 0;
@@ -84,6 +75,7 @@ static int fillResult(void *NotUsed, int argc, char **argv, char **azColName) {
 char authentication(char* login, char* password) {
 	char getUserSelect[255];
 	char* errorMessage = 0;
+	
 	if (strlen(login) > MAX_LOGIN_LINGTH && strlen(password) > MAX_PASSWORD_LINGTH) {
 		return AUTHENTICATION_ERROR;
 	}
@@ -105,11 +97,15 @@ char authentication(char* login, char* password) {
 }
 
 void* authorization() {
+	char login[MAX_LOGIN_LINGTH];
+	char password[MAX_PASSWORD_LINGTH];
+	char userRole;
 	int i;
+
 	printf("Enter login: ");
 	gets(login);
 	printf("Enter password: ");
-	for (int i = 0; i < MAX_PASSWORD_LINGTH; i++) {
+	for (i = 0; i < MAX_PASSWORD_LINGTH; i++) {
 		password[i] = _getch();
 		if (password[i] == '\r') {
 			password[i] = '\0';
@@ -142,8 +138,11 @@ int showBankInfo() {
 }
 
 int registerNewUser() {
+	char login[MAX_LOGIN_LINGTH];
+	char password[MAX_PASSWORD_LINGTH];
 	char getUserSelect[255];
 	char* errorMessage = 0;
+
 	printf("Enter login: ");
 	gets(login);
 	printf("Enter password: ");
