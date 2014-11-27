@@ -11,8 +11,7 @@
 
 
 extern char* dataBaseName;
-extern int resultId;
-
+int resultId;
 
 
 void adminOperation() {
@@ -45,25 +44,27 @@ void adminOperation() {
 
 void operationistOperation() {
 	int menuItem, accountId, moneyValue;
-
-	printf("Choose operation:\n1. Put money to account.\n2. Take money from account.\n");
-	scanf("%d", &menuItem);
-	printf("Input accountId to what put money.\n");
-	scanf("%d", &accountId);
-	printf("Input money value which put to account.\n");
-	scanf("%d", &moneyValue);
-
-	switch (menuItem)
-	{
-	case 1:
-		operationistPutMoneyToAccount(accountId, moneyValue);
-		break;
-	case 2:
-		operationTakeMoneyFromAccount(accountId, moneyValue);
-		break;
-	default:
-		printf("Incorrect menu item.");
-		break;
+	char* command = (char*)malloc(sizeof(char)* 10);
+	while(1) {
+		printf("Choose operation:\n1. Put money to account.\n2. Take money from account.\n3. Exit.\n");
+		scanf("%s", command);
+		if (!strcmp(command, "3")) {
+			return;
+		}
+		else if (!strcmp(command, "1")) {
+			printf("Input accountId to what put money.\n");
+			scanf("%d", &accountId);
+			printf("Input money value which put to account.\n");
+			scanf("%d", &moneyValue);
+			operationistPutMoneyToAccount(accountId, moneyValue);
+		}
+		else if (!strcmp(command, "2")) {
+			printf("Input accountId to what put money.\n");
+			scanf("%d", &accountId);
+			printf("Input money value which take from account.\n");
+			scanf("%d", &moneyValue);
+			operationTakeMoneyFromAccount(accountId, moneyValue);
+		}
 	}
 }
 
