@@ -11,6 +11,7 @@ extern sqlite3* dataBase;
 
 char* resultPassword;
 char resultRole;
+extern resultId;
 
 int openDataBase() {
 	if (sqlite3_open(dataBaseName, &dataBase)) {

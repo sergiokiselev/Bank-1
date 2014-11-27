@@ -2,6 +2,7 @@
 
 char* dbName4 = "db";
 int tmpClientId;
+int resultId;
 
 static int watchClientCallback(void *NotUsed, int argc, char **argv, char **azColName) {
 	char* p1,* p2,* p3, *p4;
