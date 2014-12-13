@@ -1,17 +1,12 @@
-#include "sqlite3.h"
 #include <stdio.h>
-#include <malloc.h>
-#include <math.h>
-#include <stdlib.h>
-#include <string.h>
 #include "adminFunctions.h"
 #include "operationistFunctions.h"
 #include "clientFunctions.h"
 #include "unsignedFunctions.h"
 
-
 extern char* dataBaseName;
 int resultId;
+
 
 
 void adminOperation() {

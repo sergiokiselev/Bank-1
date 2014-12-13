@@ -1,13 +1,17 @@
 #include "stdio.h"
 #include "sqlite3.h"
-#include <malloc.h>
 #include <string.h>
 #include <stdlib.h>
 #include "unsignedFunctions.h"
 #include "util.h"
+#include <unistd.h>
 
 extern char* dataBaseName;
 extern sqlite3* dataBase;
+
+
+
+
 
 char* resultPassword;
 char resultRole;
@@ -106,16 +110,21 @@ char authentication(char* login, char* password) {
 
 void* authorization() {
 	char login[MAX_LOGIN_LINGTH];
-	char password[MAX_PASSWORD_LINGTH];
+	char* password;
 	char userRole;
 	int i;
 
 	printf("Enter login: ");
 	gets(login);
+
+
+#ifndef WIN32
+	password = getpass("Enter password: ");
+#else
 	printf("Enter password: ");
 	for (i = 0; i < MAX_PASSWORD_LINGTH; i++) {
 		password[i] = _getch();
-		if (password[i] == '\r') {
+		if (password[i] == '\r' || password[i] == '\n' || password[i] == ' ') {
 			password[i] = '\0';
 			putchar('\n');
 			break;
@@ -128,6 +137,7 @@ void* authorization() {
 		}
 		
 	}
+#endif
 	userRole = authentication(login, password);
     
 	for (i = 0; i < ROLES_NUMBER; ++i) {

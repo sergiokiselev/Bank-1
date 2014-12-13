@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "minunit.h"
-#include "unsignedFunctions.h"
+#include "unsignedFunctions.c"
+
 
 int tests_run = 0;
 
@@ -36,7 +37,10 @@ int startTests() {
 		printf("ALL TESTS PASSED\n");
 	}
 	printf("Tests run: %d\n", tests_run);
-	system("pause");
 	return result != 0;
+}
+
+int main() {
+	startTests();
 }
 

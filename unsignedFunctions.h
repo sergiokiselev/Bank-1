@@ -1,7 +1,4 @@
 
-#ifndef _UNSIGNED_USER_
-#define _UNSIGNED_USER_
-
 int openDataBase();
 int closeDataBase();
 
@@ -26,4 +23,4 @@ char authentication(char* login, char* password);
 
 void menu(int itemNum, char* menuItem[], void*(*menuFunctions[])());
 
-#endif _UNSIGNED_USER_
+

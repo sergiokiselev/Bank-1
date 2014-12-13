@@ -1,5 +1,5 @@
 
-void addAccountToClient(char* login, char* password);
+void addAccountToClient(char* login, char* password, int pin, int accountType, int overdraft);
 
 void deleteAccountToClient(int id);
 
