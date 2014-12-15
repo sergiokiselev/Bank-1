@@ -4,18 +4,17 @@
 #include <stdlib.h>
 #include "unsignedFunctions.h"
 #include "util.h"
+#ifdef __linux__
 #include <unistd.h>
+#endif
 
 extern char* dataBaseName;
 extern sqlite3* dataBase;
-
-
-
+extern resultId;
 
 
 char* resultPassword;
 char resultRole;
-extern resultId;
 
 int openDataBase() {
 	if (sqlite3_open(dataBaseName, &dataBase)) {
@@ -110,7 +109,11 @@ char authentication(char* login, char* password) {
 
 void* authorization() {
 	char login[MAX_LOGIN_LINGTH];
+#ifdef __linux__
 	char* password;
+#elif _WIN32
+	char password[MAX_PASSWORD_LINGTH];
+#endif
 	char userRole;
 	int i;
 
@@ -118,9 +121,9 @@ void* authorization() {
 	gets(login);
 
 
-#ifndef WIN32
+#ifdef __linux__
 	password = getpass("Enter password: ");
-#else
+#elif _WIN32
 	printf("Enter password: ");
 	for (i = 0; i < MAX_PASSWORD_LINGTH; i++) {
 		password[i] = _getch();

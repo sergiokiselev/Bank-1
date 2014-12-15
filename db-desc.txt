@@ -1,0 +1,15 @@
+% транзакции сохраняются в transactions.
+
+CREATE TABLE IF NOT EXISTS transactions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    account_id INTEGER NOT NULL,
+    sum INTEGER NOT NULL,
+    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+                
+                
+CREATE TRIGGER transaction_save
+AFTER UPDATE OF balance ON bank_accounts
+BEGIN
+    INSERT INTO transactions(account_id, sum) VALUES(NEW.accountid, NEW.balance - OLD.balance);
+END;
