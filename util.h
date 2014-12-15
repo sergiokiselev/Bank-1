@@ -1,11 +1,15 @@
 #include "sqlite3.h"
+#include "adminFunctions.h"
+#include "operationistFunctions.h"
+#include "clientFunctions.h"
 
-#ifndef _UTIL_
-#define _UTIL_
+
 char* dataBaseName = "db";
 sqlite3* dataBase;
 
 int openDataBase();
 int closeDataBase();
 
-#endif _UTIL_
+void adminOperation();
+void clientOperation();
+void operationistOperation();

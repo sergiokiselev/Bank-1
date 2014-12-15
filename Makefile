@@ -15,12 +15,14 @@ SOURCES = main.c \
 		clientFunctions.c \
 		operationistFunctions.c \
 		unsignedFunctions.c \
+		util.c \
 		sqlite3.c
 OBJECTS = main.o \
 		adminFunctions.o \
 		clientFunctions.o \
 		operationistFunctions.o \
 		unsignedFunctions.o \
+		util.o \
 		sqlite3.o
 
 TARGET  = bank-api

@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include "unsignedFunctions.h"
 #include "util.h"
-#ifndef _WIN32 
+#ifndef _WIN32
 #include <unistd.h>
 #endif
 
@@ -109,9 +109,9 @@ char authentication(char* login, char* password) {
 
 void* authorization() {
 	char login[MAX_LOGIN_LINGTH];
-
+#ifndef _WIN32
 	char* password;
-#ifdef _WIN32
+#else
 	char password[MAX_PASSWORD_LINGTH];
 #endif
 	char userRole;
@@ -122,9 +122,10 @@ void* authorization() {
 
 
 
+#ifndef _WIN32
 	password = getpass("Enter password: ");
-#ifdef _WIN32
-	printf("Enter password: ");
+#else
+    printf("Enter password: ");
 	for (i = 0; i < MAX_PASSWORD_LINGTH; i++) {
 		password[i] = _getch();
 		if (password[i] == '\r' || password[i] == '\n' || password[i] == ' ') {
