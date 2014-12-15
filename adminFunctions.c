@@ -87,3 +87,21 @@ void deleteClient(int id) {
 	}
 }
 
+
+
+
+void showTransactions(int count) {
+	char getTransactionsSelect[255];
+	char* errorMessage = 0;
+	char* result = (char*)malloc(sizeof(char)* 255);
+	sqlite3_stmt *statement;
+
+	sprintf(getTransactionsSelect, "SELECT * FROM transactions ORDER BY id ASC limit %d;", count);
+	if (sqlite3_prepare_v2(dataBase, getTransactionsSelect, -1, &statement, NULL) == SQLITE_OK) {
+		printf("%s\t%s\t%s\t%s\n", sqlite3_column_name(statement, 0), sqlite3_column_name(statement, 1), sqlite3_column_name(statement, 2), sqlite3_column_name(statement, 3));
+		while (sqlite3_step(statement) == SQLITE_ROW) {
+			printf("%s\t%s\t\t%s\t%s\n", sqlite3_column_text(statement, 0), sqlite3_column_text(statement, 1), sqlite3_column_text(statement, 2), sqlite3_column_text(statement, 3));
+		}
+	}
+
+}

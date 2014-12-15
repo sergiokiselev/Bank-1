@@ -1,4 +1,5 @@
 #include "clientFunctions.h"
+#include "sqlite3.h"
 
 char* dbName4 = "db";
 int tmpClientId;
