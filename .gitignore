@@ -5,6 +5,7 @@
 *.vcxproj.filters
 sqlite*
 *.db
+bank-api
 
 # Compiled Object files
 *.slo

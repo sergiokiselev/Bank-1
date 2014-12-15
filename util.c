@@ -64,14 +64,15 @@ void operationistOperation() {
 }
 
 
-
 void clientOperation() {
 	char* command = (char*)malloc(sizeof(char)* 10);
 	char* accountIdStr = (char*)malloc(sizeof(char)* 20);
 	int accountId;
+	int sum;
+	int toAccountId;
 
 	while(1) {
-		printf("Choose operation:\n  0. Exit\n  1. Watch client accounts\n  2. Watch account balance\n  3. Watch acount cards\n");
+		printf("Choose operation:\n  0. Exit\n  1. Watch client accounts\n  2. Watch account balance\n  3. Watch acount cards\n  4. Send money to account\n");
 		scanf("%s", command);
 		if (!strcmp(command, "0")) {
 			return;
@@ -87,7 +88,17 @@ void clientOperation() {
 			scanf("%s", accountIdStr);
 			accountId = atoi(accountIdStr);
 			watchAccountCards(accountId, resultId);
+		} else if (!strcmp(command, "4")) {
+			printf("Enter from account id:\n");
+			scanf("%s", accountIdStr);
+			accountId = atoi(accountIdStr);
+			printf("Enter to account id:\n");
+			scanf("%s", accountIdStr);
+			toAccountId = atoi(accountIdStr);
+			printf("Enter to sum:\n");
+			scanf("%s", accountIdStr);
+			sum = atoi(accountIdStr);
+			sendMoneyToAnotherAccount(resultId, accountId, toAccountId, sum);
 		}
 	}
 }
-
