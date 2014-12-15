@@ -54,6 +54,7 @@ int watchClientAccounts(int clientId) {
 	if (sqlite3_open(dbName4, &database) == SQLITE_OK) {
 		sprintf(command, "select accountid, balance, accountType, oberdraft_start from bank_accounts where clientid = '%d'", clientId);
 		rc = sqlite3_exec(database, command, watchClientCallback, 0, &zErrMsg);
+		return 1;
 	}
 	return 0;
 }
@@ -66,6 +67,7 @@ int watchAccountBalance(int accountId, int clientId) {
 	if (sqlite3_open(dbName4, &database) == SQLITE_OK) {
 		sprintf(command, "select balance from bank_accounts where accountid = '%d' and clientid = '%d'", accountId, clientId);
 		rc = sqlite3_exec(database, command, watchBalanceCallback, 0, &zErrMsg);
+		return 1;
 	}
 	return 0;
 }
@@ -82,6 +84,7 @@ int watchAccountCards(int accountId, int clientId) {
 			sprintf(command, "select card_id from card where account_id = '%d'", accountId);
 			rc = sqlite3_exec(database, command, watchCardsCallback, 0, &zErrMsg);
 		}
+		return 1;
 	}
 	return 0;
 }
