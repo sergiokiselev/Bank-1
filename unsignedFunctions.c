@@ -109,7 +109,7 @@ char authentication(char* login, char* password) {
 
 void* authorization() {
 	char login[MAX_LOGIN_LINGTH];
-#ifndef _WIN32 
+#ifndef _WIN32
 	char* password;
 #else
 	char password[MAX_PASSWORD_LINGTH];
@@ -121,10 +121,11 @@ void* authorization() {
 	gets(login);
 
 
+
 #ifndef _WIN32
 	password = getpass("Enter password: ");
 #else
-	printf("Enter password: ");
+    printf("Enter password: ");
 	for (i = 0; i < MAX_PASSWORD_LINGTH; i++) {
 		password[i] = _getch();
 		if (password[i] == '\r' || password[i] == '\n' || password[i] == ' ') {

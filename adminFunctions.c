@@ -88,6 +88,38 @@ void deleteClient(int id) {
 }
 
 
+void addNewCard(char* login, char* password, int accountid, int pin) {
+    int primaryKey;
+    int rc1;
+    sqlite3 *database;
+    char* insertCommand = (char*)malloc(sizeof(char)*200);
+    char *zErrMsg = 0;
+    if (sqlite3_open(dataBaseName, &database) == SQLITE_OK) {
+        const char *sql = "SELECT MAX(card_id) FROM card";
+        sqlite3_stmt *statement;
+        if (sqlite3_prepare_v2(database, sql, -1, &statement, NULL) == SQLITE_OK) {
+            while (sqlite3_step(statement) == SQLITE_ROW) {
+                primaryKey = sqlite3_column_int(statement, 0);
+            }
+        }
+    }
+    sprintf(insertCommand, "insert into card values(%d, '%s', '%s', %d);",++primaryKey , accountid, pin);
+    rc1 = sqlite3_exec(database, insertCommand, 0, 0, &zErrMsg);
+}
+
+void deleteCard(int id) {
+    int rc1;
+    sqlite3 *database;
+    char* insertCommand = (char*)malloc(sizeof(char)*200);
+    char *zErrMsg = 0;
+    if (sqlite3_open(dataBaseName, &database) == SQLITE_OK) {
+        sprintf(insertCommand, "delete from card where card_id = %d",id);
+        rc1 = sqlite3_exec(database, insertCommand, 0, 0, &zErrMsg);
+        if (rc1 != SQLITE_OK) {
+            printf("Sqlite error!");
+        }
+    }
+}
 
 
 void showTransactions(int count) {
