@@ -3,6 +3,7 @@
 char* dbName4 = "db";
 int tmpClientId;
 int resultId;
+int tmpBalance = 0;
 
 static int watchClientCallback(void *NotUsed, int argc, char **argv, char **azColName) {
 	char* p1,* p2,* p3, *p4;
@@ -41,8 +42,11 @@ static int watchCardsCallback(void *NotUsed, int argc, char **argv, char **azCol
 
 static int getClientByAcountCallback(void *NotUsed, int argc, char **argv, char **azColName) {
 	char* p1 = (char*)malloc(sizeof(char)*100);
+	char* p2 = (char*)malloc(sizeof(char)*100);
 	sprintf(p1, "%s", argv[0] ? argv[0] : "NULL");
+	sprintf(p2, "%s", argv[1] ? argv[1] : "NULL");
 	tmpClientId = atoi(p1);
+	tmpBalance = atoi(p2);
 	return 0;
 }
 
@@ -78,11 +82,30 @@ int watchAccountCards(int accountId, int clientId) {
 	char *zErrMsg = 0;
 	int rc;
 	if (sqlite3_open(dbName4, &database) == SQLITE_OK) {
-		sprintf(command, "select clientid from bank_accounts where accountid = '%d'", accountId);
+		sprintf(command, "select clientid, balance from bank_accounts where accountid = '%d'", accountId);
 		rc = sqlite3_exec(database, command, getClientByAcountCallback, 0, &zErrMsg);
 		if (tmpClientId == clientId) {
 			sprintf(command, "select card_id from card where account_id = '%d'", accountId);
 			rc = sqlite3_exec(database, command, watchCardsCallback, 0, &zErrMsg);
+		}
+		return 1;
+	}
+	return 0;
+}
+
+int sendMoneyToAnotherAccount(int clientId, int fromAccountId, int toAccountId, int sum) {
+	sqlite3 *database;
+	char* command = (char*)malloc(sizeof(char)*100);
+	char *zErrMsg = 0;
+	int rc;
+	if (sqlite3_open(dbName4, &database) == SQLITE_OK) {
+		sprintf(command, "select clientid, balance from bank_accounts where accountid = '%d'", fromAccountId);
+		rc = sqlite3_exec(database, command, getClientByAcountCallback, 0, &zErrMsg);
+		if (tmpClientId == clientId && tmpBalance > sum) {
+			sprintf(command, "update bank_accounts set balance = balance - '%d' where accountid = '%d'", sum,  fromAccountId);
+			rc = sqlite3_exec(database, command, 0, 0, &zErrMsg);
+			sprintf(command, "update bank_accounts set balance = balance + '%d' where accountid = '%d'", sum,  toAccountId);
+			rc = sqlite3_exec(database, command, 0, 0, &zErrMsg);
 		}
 		return 1;
 	}
