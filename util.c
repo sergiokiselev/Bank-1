@@ -36,7 +36,7 @@ int closeDataBase() {
 void adminOperation() {
 	int menuItem;
 	char* login, *password;
-	printf("Admin operation: 1 - add client, 2 - delete client, 3 - add account, 4 - delete account. \n");
+	printf("Admin operation: 1 - add client, 2 - delete client, 3 - add account, 4 - delete account. 5 - add new card, 6 - delete card, 7- show transaction. \n");
 	scanf("%d", &menuItem);
 	printf("Enter login and password of client:");
 	login = (char*)malloc(sizeof(char)* 100);
@@ -55,6 +55,15 @@ void adminOperation() {
 		case 4:
 			deleteAccountToClient(6);
 			break;
+        case 5:
+            addNewCard(login,password,1,1111);
+            break;
+        case 6:
+            deleteCard(1);
+            break;
+        case 7:
+            showTransactions(4);
+            break;
 		default:
 			printf("cannot find such operation");
 			break;
