@@ -4,8 +4,12 @@
 #include "clientFunctions.h"
 
 
+#ifndef STOP
+#define STOP
+char* dataBaseName = "db";
+sqlite3* dataBase;
+#endif
 
-extern char* dataBaseName;
 int resultId;
 
 

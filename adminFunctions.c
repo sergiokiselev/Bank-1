@@ -1,6 +1,7 @@
 #include "stdio.h"
 #include "sqlite3.h"
 #include "adminFunctions.h"
+#include "util.h"
 
 extern sqlite3 *dataBase;
 extern char* dataBaseName;

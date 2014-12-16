@@ -5,6 +5,7 @@ int closeDataBase();
 void adminOperation();
 void operationistOperation();
 void clientOperation();
+
 int unauthorizedRole();
 
 char authentication(char* login, char* password);

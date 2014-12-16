@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "unsignedFunctions.h"
-#include "util.h"
+
 #ifndef _WIN32
 #include <unistd.h>
 #endif
@@ -86,7 +86,8 @@ static int fillResult(void *NotUsed, int argc, char **argv, char **azColName) {
 char authentication(char* login, char* password) {
 	char getUserSelect[255];
 	char* errorMessage = 0;
-	
+	resultPassword = " \0";
+
 	if (strlen(login) > MAX_LOGIN_LINGTH && strlen(password) > MAX_PASSWORD_LINGTH) {
 		return AUTHENTICATION_ERROR;
 	}

@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "minunit.h"
-#include "unsignedFunctions.c"
+#include "unsignedFunctions.h"
 
 
 int tests_run = 0;
@@ -14,9 +14,9 @@ static char * test_authentication() {
 	mu_assert("error, empty input", authentication("", "") == 'u');
 	mu_assert("error, wrong input", authentication("admin\0password", "**_88") == 'u');
 	mu_assert("error, wrong input", authentication("TRUE", "") == 'u');
-	mu_assert("error, long login", authentication("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "") == 'u');
-	mu_assert("error, long password", authentication("", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA") == 'u');
-	mu_assert("error, unreal authentication", authentication("sa", "pass1") == 'u');
+	mu_assert("error, long login", authentication("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "") == 'u');
+	mu_assert("error, long password", authentication("", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA") == 'u');
+	mu_assert("error, unreal authentication", authentication("swwa", "pass1") == 'u');
 	mu_assert("error, operator authentication", closeDataBase() == 0);
 
 	return 0;
@@ -42,5 +42,7 @@ int startTests() {
 
 int main() {
 	startTests();
+	system("pause");
+
 }
 
