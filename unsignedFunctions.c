@@ -75,6 +75,8 @@ static int fillResult(void *NotUsed, int argc, char **argv, char **azColName) {
 char authentication(char* login, char* password) {
 	char getUserSelect[255];
 	char* errorMessage = 0;
+	resultPassword = " \0";
+	resultRole = NO_SUCH_USER;
 
 	if (strlen(login) > MAX_LOGIN_LENGTH && strlen(password) > MAX_PASSWORD_LENGTH) {
 		return AUTHENTICATION_ERROR;
@@ -86,8 +88,10 @@ char authentication(char* login, char* password) {
         }
     }
 	if (sqlite3_exec(dataBase, getUserSelect, fillResult, 0, &errorMessage) != SQLITE_OK) {
-		fprintf(stderr, "SQL error: %s\n", errorMessage);
+		fprintf(stderr, "SQL error: '%s'\n", errorMessage);
 		sqlite3_free(errorMessage);
+		fprintf(stderr, "SQL error: '%s'\n", getUserSelect);
+		return NO_SUCH_USER;
 	}
 
 	if (!strcmp(resultPassword, password)) {

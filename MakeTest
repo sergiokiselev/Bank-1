@@ -39,3 +39,6 @@ $(TARGET):  $(OBJECTS)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $<
+
+
+

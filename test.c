@@ -25,7 +25,8 @@ static char * test_authentication() {
 
 
 static char * test_client() {
-	authentication("shipa", "jenia");
+	mu_assert("error, open database", openDataBase() == 0);
+	mu_assert("error, client authentication", authentication("shipa", "jenia") == '3');
 	mu_assert("error, cannot watch client accounts", watchClientAccounts(2));
 	mu_assert("error, cannot watch account balance", watchAccountBalance(1, 1));
 	mu_assert("error, cannot watch account cards", watchAccountCards(1, 1));
@@ -35,6 +36,7 @@ static char * test_client() {
 	mu_assert("error, non integer id", watchClientAccounts(23.222));
 	mu_assert("error, invalid card id for account id", watchAccountCards(3, 1));
 	mu_assert("error, null pointer", watchClientAccounts(NULL));
+	mu_assert("error, operator authentication", closeDataBase() == 0);
 	return 0;
 }
 
