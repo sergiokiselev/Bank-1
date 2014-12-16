@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "unsignedFunctions.h"
 #include "util.h"
+
 #ifndef _WIN32
 #include <unistd.h>
 #endif
@@ -13,36 +14,24 @@ extern sqlite3* dataBase;
 extern resultId;
 
 
+#define DATABASE_ERROR 1
+#define ADMIN_ROLE '1'
+#define OPERATOR_ROLE '2'
+#define CLIENT_ROLE '3'
+#define AUTHENTICATION_ERROR 'e'
+#define NO_SUCH_USER 'u'
+#define ROLES_NUMBER 3
+
+#define MAX_LOGIN_LENGTH 32
+#define MAX_PASSWORD_LENGTH 32
+
+
 char* resultPassword;
 char resultRole;
-
-int openDataBase() {
-	if (sqlite3_open(dataBaseName, &dataBase)) {
-		fprintf(stderr, "Can't open database.\n Error: %s\n", sqlite3_errmsg(dataBase));
-		sqlite3_close(dataBase);
-		return 1;
-	}
-	return 0;
-};
-int closeDataBase() {
-	if (dataBase == NULL) {
-		return 0;
-	}
-	if (sqlite3_close(dataBase)) {
-		fprintf(stderr, "Can't close database.\n Error: %s\n", sqlite3_errmsg(dataBase));
-		return 1;
-	}
-	return 0;
-};
 
 char roles[ROLES_NUMBER] = { ADMIN_ROLE, OPERATOR_ROLE, CLIENT_ROLE };
 void* rolesFunctions[ROLES_NUMBER] = { *adminOperation, *operationistOperation, *clientOperation };
 
-char authentication(char* login, char* password);
-void* authorization();
-int logIn();
-int registerNewUser();
-int showBankInfo();
 
 #define MAIN_MENU_ITEM_NUM 3
 char* mainMenuItem[] = { "LogIn", "Register", "BankInfo" };
@@ -86,8 +75,10 @@ static int fillResult(void *NotUsed, int argc, char **argv, char **azColName) {
 char authentication(char* login, char* password) {
 	char getUserSelect[255];
 	char* errorMessage = 0;
-	
-	if (strlen(login) > MAX_LOGIN_LINGTH && strlen(password) > MAX_PASSWORD_LINGTH) {
+	resultPassword = " \0";
+	resultRole = NO_SUCH_USER;
+
+	if (strlen(login) > MAX_LOGIN_LENGTH && strlen(password) > MAX_PASSWORD_LENGTH) {
 		return AUTHENTICATION_ERROR;
 	}
 	sprintf(getUserSelect, "SELECT password, role, user_id FROM user WHERE login = '%s'", login);
@@ -97,22 +88,28 @@ char authentication(char* login, char* password) {
         }
     }
 	if (sqlite3_exec(dataBase, getUserSelect, fillResult, 0, &errorMessage) != SQLITE_OK) {
-		fprintf(stderr, "SQL error: %s\n", errorMessage);
+		fprintf(stderr, "SQL error: '%s'\n", errorMessage);
 		sqlite3_free(errorMessage);
+		fprintf(stderr, "SQL error: '%s'\n", getUserSelect);
+		return NO_SUCH_USER;
 	}
 
 	if (!strcmp(resultPassword, password)) {
 		return resultRole;
 	}
+
+
+//	free(resultPassword);
+	resultPassword = " \0";
 	return NO_SUCH_USER;
 }
 
 void* authorization() {
-	char login[MAX_LOGIN_LINGTH];
+	char login[MAX_LOGIN_LENGTH];
 #ifndef _WIN32
 	char* password;
 #else
-	char password[MAX_PASSWORD_LINGTH];
+	char password[MAX_PASSWORD_LENGTH];
 #endif
 	char userRole;
 	int i;
@@ -126,7 +123,7 @@ void* authorization() {
 	password = getpass("Enter password: ");
 #else
     printf("Enter password: ");
-	for (i = 0; i < MAX_PASSWORD_LINGTH; i++) {
+	for (i = 0; i < MAX_PASSWORD_LENGTH; i++) {
 		password[i] = _getch();
 		if (password[i] == '\r' || password[i] == '\n' || password[i] == ' ') {
 			password[i] = '\0';
@@ -160,8 +157,8 @@ int showBankInfo() {
 }
 
 int registerNewUser() {
-	char login[MAX_LOGIN_LINGTH];
-	char password[MAX_PASSWORD_LINGTH];
+	char login[MAX_LOGIN_LENGTH];
+	char password[MAX_PASSWORD_LENGTH];
 	char getUserSelect[255];
 	char* errorMessage = 0;
 

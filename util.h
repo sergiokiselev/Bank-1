@@ -3,9 +3,8 @@
 #include "operationistFunctions.h"
 #include "clientFunctions.h"
 
-
-char* dataBaseName = "db";
-sqlite3* dataBase;
+extern char* dataBaseName;
+int resultId;
 
 int openDataBase();
 int closeDataBase();
