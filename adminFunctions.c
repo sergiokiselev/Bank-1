@@ -40,7 +40,7 @@ void addAccountToClient(char* login, char* password, int pin, int accountType, i
 }
 
 
-void deleteAccountToClient(int id) { 
+void deleteAccountToClient(int id) {
 	int rc1;
 	sqlite3 *database;
 	char* insertCommand = (char*)malloc(sizeof(char)*200);

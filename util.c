@@ -34,40 +34,61 @@ int closeDataBase() {
 
 
 void adminOperation() {
-	int menuItem;
 	char* login, *password;
-	printf("Admin operation: 1 - add client, 2 - delete client, 3 - add account, 4 - delete account. 5 - add new card, 6 - delete card, 7- show transaction. \n");
-	scanf("%d", &menuItem);
+    int role, id ,pin, accountType, overdraft,countTransactions;
+    char* command = (char*)malloc(sizeof(char)* 10);
 	printf("Enter login and password of client:");
 	login = (char*)malloc(sizeof(char)* 100);
 	password = (char*)malloc(sizeof(char)* 100);
 	scanf("%s %s", login, password);
-	switch (menuItem) {
-		case 1:
-			addNewClient(login,password,3);
-			break;
-		case 2:
-			deleteClient(2);
-			break;
-		case 3:
-			addAccountToClient(login,password,1111,2,55);
-			break;
-		case 4:
-			deleteAccountToClient(6);
-			break;
-        case 5:
-            addNewCard(login,password,1,1111);
-            break;
-        case 6:
-            deleteCard(1);
-            break;
-        case 7:
-            showTransactions(4);
-            break;
-		default:
-			printf("cannot find such operation");
-			break;
-	}
+    while(1) {
+        printf("Admin operations: 1 - add client, 2 - delete client, 3 - add account, 4 - delete account. 5 - add new card, 6 - delete card, 7- show transaction,0 - exit. \n");
+        scanf("%s", command);
+        if (!strcmp(command, "0")) {
+            return;
+        }
+        else if (!strcmp(command, "1")) {
+            printf("Input role for client.\n");
+            scanf("%d",&role);
+            addNewClient(login,password,role);
+        }
+        else if (!strcmp(command, "2")) {
+            printf("Input client id.\n");
+            scanf("%d", &id);
+            deleteClient(id);
+        }
+        else if (!strcmp(command, "3")) {
+            printf("Input pin\n");
+            scanf("%d", &pin);
+            printf("Input account type\n");
+            scanf("%d", &accountType);
+            printf("Input overdraft\n");
+            scanf("%d", &overdraft);
+            addAccountToClient(login,password, pin, accountType, overdraft);
+        }
+        else if (!strcmp(command, "4")) {
+            printf("Input account id.\n");
+            scanf("%d", &id);
+            deleteAccountToClient(id);
+        }
+        else if (!strcmp(command, "5")) {
+            printf("Input pin\n");
+            scanf("%d", &pin);
+            printf("Input account id\n");
+            scanf("%d", &id);
+            addNewCard(login,password,id,pin);
+        }
+        else if (!strcmp(command, "6")) {
+            printf("Input card id\n");
+            scanf("%d", &id);
+            deleteCard(id);
+        }
+        else if (!strcmp(command, "7")) {
+            printf("Input count of transactions to show\n");
+            scanf("%d", &countTransactions);
+            showTransactions(countTransactions);
+        }
+    }
 }
 
 void operationistOperation() {
