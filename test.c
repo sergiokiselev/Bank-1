@@ -49,12 +49,14 @@ static char * all_tests() {
 
 int startTests() {
 	char *result = all_tests();
+	FILE* file = fopen("test_results.txt", "w");
 	if (result != 0) {
-		printf("%s\n", result);
+		fprintf(file, "%s\n", result);
 	} else {
-		printf("ALL TESTS PASSED\n");
+		fprintf(file, "ALL TESTS PASSED\n");
 	}
-	printf("Tests run: %d\n", tests_run);
+	fprintf(file, "Tests run: %d\n", tests_run);
+	fclose(file);
 	return result != 0;
 }
 
