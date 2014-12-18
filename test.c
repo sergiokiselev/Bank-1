@@ -10,7 +10,6 @@ static char * test_authentication() {
 	mu_assert("error, open database", openDataBase() == 0);
 	mu_assert("error, admin authentication", authentication("admin", "pass1") == '1');
 	mu_assert("error, operator authentication", authentication("oper", "pass2") == '2');
-	mu_assert("error, user authentication", authentication("shipa", "jenia") == '3');
 	mu_assert("error, empty input", authentication("", "") == 'u');
 	mu_assert("error, wrong input", authentication("admin\0password", "**_88") == 'u');
 	mu_assert("error, wrong input", authentication("TRUE", "") == 'u');

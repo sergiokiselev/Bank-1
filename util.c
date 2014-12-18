@@ -53,10 +53,6 @@ void adminOperation() {
             addNewClient(login,password,role);
         }
         else if (!strcmp(command, "2")) {
-            printf("Enter login and password of client:");
-            login = (char*)malloc(sizeof(char)* 100);
-            password = (char*)malloc(sizeof(char)* 100);
-            scanf("%s %s", login, password);
             printf("Input client id.\n");
             scanf("%d", &id);
             deleteClient(id);
