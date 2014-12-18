@@ -37,6 +37,7 @@ void addAccountToClient(char* login, char* password, int pin, int accountType, i
 	}
 	sprintf(insertCommand, "insert into bank_accounts values(%d, 0, %d, %d, %d, %d);",++client_id , pin, primaryKey, accountType, overdraft);   
 	rc1 = sqlite3_exec(database, insertCommand, 0, 0, &zErrMsg);
+    printf("added account with id:%d for client with login:%d, pin:%d, account type:%d, overdraft:%d", client_id, login, pin, accountType, overdraft);
 }
 
 
@@ -52,6 +53,7 @@ void deleteAccountToClient(int id) {
 			printf("Sqlite error!");
 		}
 	}
+    printf("deleted account by id:%d", id);
 }
 
 
@@ -72,6 +74,7 @@ void addNewClient(char* login, char* password, int role) {
     }
 	sprintf(insertCommand, "insert into user values(%d, '%s', '%s', %d);",++primaryKey , login, password, role);   
 	rc1 = sqlite3_exec(database, insertCommand, 0, 0, &zErrMsg);
+    printf("added new client with id:%d, login:%d, password:%d, role:%d");
 }
 
 void deleteClient(int id) {
@@ -86,6 +89,8 @@ void deleteClient(int id) {
 			printf("Sqlite error!");
 		}
 	}
+    printf("deleted client by id:%d", id);
+
 }
 
 
@@ -106,6 +111,7 @@ void addNewCard(char* login, char* password, int accountid, int pin) {
     }
     sprintf(insertCommand, "insert into card values(%d, '%s', '%s', %d);",++primaryKey , accountid, pin);
     rc1 = sqlite3_exec(database, insertCommand, 0, 0, &zErrMsg);
+    printf("added new card for client with id = %d, login:%d, account id = %d , pin = %d", primaryKey, login, accountid, pin);
 }
 
 void deleteCard(int id) {
@@ -120,6 +126,7 @@ void deleteCard(int id) {
             printf("Sqlite error!");
         }
     }
+    printf("deleted card by id:%d", id);
 }
 
 
