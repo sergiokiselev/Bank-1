@@ -56,7 +56,6 @@ void deleteAccountToClient(int id) {
     printf("deleted account by id:%d", id);
 }
 
-
 void addNewClient(char* login, char* password, int role) {
 	int primaryKey; 
 	int rc1;
@@ -141,6 +140,23 @@ void showTransactions(int count) {
 		printf("%s\t%s\t%s\t%s\n", sqlite3_column_name(statement, 0), sqlite3_column_name(statement, 1), sqlite3_column_name(statement, 2), sqlite3_column_name(statement, 3));
 		while (sqlite3_step(statement) == SQLITE_ROW) {
 			printf("%s\t%s\t\t%s\t%s\n", sqlite3_column_text(statement, 0), sqlite3_column_text(statement, 1), sqlite3_column_text(statement, 2), sqlite3_column_text(statement, 3));
+		}
+	}
+
+}
+
+
+void showUsers() {
+	char getUsersSelect[255];
+	char* errorMessage = 0;
+	char* result = (char*)malloc(sizeof(char)* 255);
+	sqlite3_stmt *statement;
+
+	sprintf(getUsersSelect, "SELECT * FROM user;");
+	if (sqlite3_prepare_v2(dataBase, getUsersSelect, -1, &statement, NULL) == SQLITE_OK) {
+		printf("%s\t%s\t%s\t%s\n", sqlite3_column_name(statement, 0), sqlite3_column_name(statement, 1), sqlite3_column_name(statement, 2), sqlite3_column_name(statement, 3));
+		while (sqlite3_step(statement) == SQLITE_ROW) {
+			printf("%s\t%s\t%s\t%s\n", sqlite3_column_text(statement, 0), sqlite3_column_text(statement, 1), sqlite3_column_text(statement, 2), sqlite3_column_text(statement, 3));
 		}
 	}
 

@@ -38,7 +38,7 @@ void adminOperation() {
     int role, id ,pin, accountType, overdraft,countTransactions;
     char* command = (char*)malloc(sizeof(char)* 10);
     while(1) {
-        printf("\n\nAdmin operations:\n  1 - add client,\n  2 - delete client,\n  3 - add account,\n  4 - delete account,\n  5 - add new card,\n  6 - delete card,\n  7 - show transaction,\n  0 - exit. \n");
+        printf("\n\nAdmin operations:\n  0 - exit.\n  1 - add client,\n  2 - delete client,\n  3 - add account,\n  4 - delete account,\n  5 - add new card,\n  6 - delete card,\n  7 - show transaction,\n  8 - show users\n");
         scanf("%s", command);
         if (!strcmp(command, "0")) {
             return;
@@ -107,6 +107,9 @@ void adminOperation() {
             printf("Input count of transactions to show\n");
             scanf("%d", &countTransactions);
             showTransactions(countTransactions);
+        } 
+        else if (!strcmp(command, "8")) {
+            showUsers();
         }
     }
 }
