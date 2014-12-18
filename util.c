@@ -38,7 +38,7 @@ void adminOperation() {
     int role, id ,pin, accountType, overdraft,countTransactions;
     char* command = (char*)malloc(sizeof(char)* 10);
     while(1) {
-        printf("Admin operations: 1 - add client, 2 - delete client, 3 - add account, 4 - delete account. 5 - add new card, 6 - delete card, 7- show transaction,0 - exit. \n");
+        printf("\n\nAdmin operations:\n  1 - add client,\n  2 - delete client,\n  3 - add account,\n  4 - delete account,\n  5 - add new card,\n  6 - delete card,\n  7 - show transaction,\n  0 - exit. \n");
         scanf("%s", command);
         if (!strcmp(command, "0")) {
             return;
@@ -104,10 +104,6 @@ void adminOperation() {
             deleteCard(id);
         }
         else if (!strcmp(command, "7")) {
-            printf("Enter login and password of client:");
-            login = (char*)malloc(sizeof(char)* 100);
-            password = (char*)malloc(sizeof(char)* 100);
-            scanf("%s %s", login, password);
             printf("Input count of transactions to show\n");
             scanf("%d", &countTransactions);
             showTransactions(countTransactions);
@@ -119,7 +115,7 @@ void operationistOperation() {
 	int menuItem, accountId, moneyValue;
 	char* command = (char*)malloc(sizeof(char)* 10);
 	while(1) {
-		printf("Choose operation:\n1. Put money to account.\n2. Take money from account.\n3. Exit.\n");
+		printf("\nChoose operation:\n1. Put money to account.\n2. Take money from account.\n3. Exit.\n");
 		scanf("%s", command);
 		if (!strcmp(command, "3")) {
 			return;
@@ -150,7 +146,7 @@ void clientOperation() {
 	int toAccountId;
 
 	while(1) {
-		printf("Choose operation:\n  0. Exit\n  1. Watch client accounts\n  2. Watch account balance\n  3. Watch acount cards\n  4. Send money to account\n");
+		printf("\nChoose operation:\n  0. Exit\n  1. Watch client accounts\n  2. Watch account balance\n  3. Watch acount cards\n  4. Send money to account\n");
 		scanf("%s", command);
 		if (!strcmp(command, "0")) {
 			return;
