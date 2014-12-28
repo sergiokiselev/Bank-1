@@ -108,7 +108,7 @@ void addNewCard(char* login, char* password, int accountid, int pin) {
             }
         }
     }
-    sprintf(insertCommand, "insert into card values(%d, '%s', '%s', %d);",++primaryKey , accountid, pin);
+    sprintf(insertCommand, "insert into card values(%d, '%d', %d);",++primaryKey , accountid, pin);
     rc1 = sqlite3_exec(database, insertCommand, 0, 0, &zErrMsg);
     printf("added new card for client with id = %d, login:%s, account id = %d , pin = %d\n", primaryKey, login, accountid, pin);
 }
